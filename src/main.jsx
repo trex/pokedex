@@ -17,13 +17,15 @@ const router = createBrowserRouter([
     loader: rootLoader,
     children: [
       {
-        path: "/pokemon/:pokemonId",
+        path: "pokemon/:pokemonId",
         element: <Pokemon />,
         loader: pokemonLoader,
       },
     ],  
   },
-]);
+], {
+  basename: "/pokedex"
+});
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
