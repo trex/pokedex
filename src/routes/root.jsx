@@ -5,8 +5,8 @@ import { getPokemons } from "../pokemons";
 export async function loader({ request }) {
   const pokemons = await getPokemons();
   
-  // Check if we're on the root path
-  if (new URL(request.url).pathname === '/') {
+  // Check if we're on the root path (basename)
+  if (new URL(request.url).pathname === '/pokedex/') {
     // Select a random Pokemon
     const randomPokemon = pokemons[Math.floor(Math.random() * pokemons.length)];
     // Redirect to the random Pokemon's page
