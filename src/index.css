@@ -27,6 +27,7 @@ body {
 
 /* Type Colors - Define once as CSS variables */
 :root {
+  --pokemon-blue: #2a75bb;
   --normal-color: #A8A878;
   --fire-color: #F08030;
   --water-color: #6890F0;
@@ -46,6 +47,7 @@ body {
   --steel-color: #B8B8D0;
   --fairy-color: #EE99AC;
 }
+
 /* Sidebar styles */
 #sidebar {
   width: 22rem;
@@ -60,12 +62,19 @@ body {
   padding-right: 2rem;
 }
 
+
+#sidebar .header-icon {
+  width: 65px;
+  height: 65px;
+}
+
 #sidebar h1 {
-  font-size: 1.5rem;
+  font-family: 'Press Start 2P', system-ui, sans-serif; /* Pokemon-style pixel font */
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--pokemon-blue);
   margin: 0;
-  padding: 1.5rem 2rem;
+  padding: .5rem 1rem;
   background: linear-gradient(to right, #f7f7f7, #e3e3e3);
   border-bottom: 2px solid #e3e3e3;
 }
@@ -448,4 +457,23 @@ body {
     text-align: center;
     color: #333;
     border: 1px solid #ddd;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+}
+
+.header-icon {
+  width: 45px;
+  height: 45px;
+}
+
+.pokemon-title {
+  font-family: 'Press Start 2P', system-ui, sans-serif; /* Pokemon-style pixel font */
+  font-size: 1.5rem;
+  margin: 0px;
+  color: #2a75bb; /* Pokemon blue color */
 }

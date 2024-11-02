@@ -2,6 +2,9 @@ import { useLoaderData, NavLink, Outlet, redirect } from "react-router-dom";
 import { useState } from "react";
 import { getPokedex } from "../pokemon";
 
+// Get the base URL from Vite's env
+const base = import.meta.env.BASE_URL;
+
 export async function loader({ request }) {
   // Hardcoded to National Pokedex for now 
   const pokedex = await getPokedex(1);
@@ -27,7 +30,14 @@ export default function Root() {
   return (
     <>
       <div id="sidebar">
-        <h1>My Pokemon</h1>
+        <div className="header-container">
+          <img 
+            src={`${base}/poke-ball.png`}
+            alt="Pokeball"
+            className="header-icon"
+          />
+          <h1 className="pokemon-title">My Pokedex</h1>
+        </div>
         <div className="search-container">
           <input
             type="text"
