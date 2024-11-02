@@ -1,5 +1,5 @@
 import { useLoaderData, NavLink, Outlet, redirect } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getPokedex } from "../pokemon";
 import Settings, { measurementUnits } from "../settings";
 // Get the base URL from Vite's env
@@ -24,6 +24,15 @@ export default function Root() {
   const [heightUnit, setHeightUnit] = useState(measurementUnits.height.find((unit) => unit.name === "feet"));
   const [weightUnit, setWeightUnit] = useState(measurementUnits.weight.find((unit) => unit.name === "pounds"));
   const [showSettings, setShowSettings] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSidebarOpen(window.innerWidth > 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const filteredPokedex = pokedex.filter(pokemon => 
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,7 +41,15 @@ export default function Root() {
 
   return (
     <>
-      <div id="sidebar">
+      <button 
+        className="sidebar-toggle"
+        onClick={() => setSidebarOpen(!isSidebarOpen)}
+        aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+      >
+        {isSidebarOpen ? '←' : '→'}
+      </button>
+
+      <div id="sidebar" className={isSidebarOpen ? 'open' : 'closed'}>
         <div className="header-container">
           <img 
             src={`${base}/poke-ball.png`}
@@ -74,7 +91,14 @@ export default function Root() {
               <ul>
                 {filteredPokedex.map((pokemon) => (
                   <li key={pokemon.id}>
-                    <NavLink to={`/pokemon/${pokemon.id}`}>
+                    <NavLink 
+                      to={`/pokemon/${pokemon.id}`}
+                      onClick={() => {
+                        if (window.innerWidth <= 768) {
+                          setSidebarOpen(false);
+                        }
+                      }}
+                    >
                       <span className="pokemon-id">{pokemon.id}</span>
                       <span className="pokemon-name">{pokemon.name}</span>
                     </NavLink>
@@ -87,7 +111,7 @@ export default function Root() {
           </nav>
         </div>
       </div>
-      <div id="detail">
+      <div id="detail" className={isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}>
         <Outlet context={{ heightUnit, weightUnit }} />
       </div>
     </>
