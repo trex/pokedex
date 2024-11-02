@@ -2,13 +2,22 @@ import { queryClient } from "./queryClient";
 
 const POKEAPI_URL = "https://pokeapi.co/api/v2";
 
+async function fetchPokemon(pokemonId) {
+    // Fetch the pokemon data
+    const pokemonResponse = await fetch(`${POKEAPI_URL}/pokemon/${pokemonId}`);
+    const pokemon = await pokemonResponse.json();
+    // Fetch the pokemon's species data
+    const speciesResponse = await fetch(pokemon.species.url);
+    const species = await speciesResponse.json();
+
+    // Combine the pokemon and species data
+    return { ...pokemon, ...species };
+}
+
 export async function getPokemon(pokemonId) {
     const pokemon = await queryClient.ensureQueryData({
         queryKey: ['pokemon', pokemonId],
-        queryFn: async () => {
-            const response = await fetch(`${POKEAPI_URL}/pokemon/${pokemonId}`);
-            return await response.json();
-        },
+        queryFn: () => fetchPokemon(pokemonId),
     });
     return pokemon;
 }

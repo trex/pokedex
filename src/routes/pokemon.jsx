@@ -14,6 +14,16 @@ export default function Pokemon() {
     return (
         <div className="pokemon-card" data-type={primaryType}>
             <div className="card-header">
+                <div className="types">
+                    {pokemon.types.map((type) => (
+                        <img 
+                            key={type.type.name} 
+                            src={`../type-icons/${type.type.name}.png`} 
+                            className="type-badge"
+                            alt={`${type.type.name} type`} 
+                        />
+                    ))}
+                </div>
                 <span className="pokemon-number">No. {pokemon.id}</span>
                 <h1 className="pokemon-name">{pokemon.name}</h1>
             </div>
@@ -29,14 +39,10 @@ export default function Pokemon() {
                         <span className="label">Weight:</span> {weightUnit.conversion(pokemon.weight)} {weightUnit.abreviation}
                     </div>
                     
-                    <div className="types">
-                        {pokemon.types.map((type) => (
-                            <span key={type.type.name} className={`type-badge ${type.type.name}`}>
-                                {type.type.name}
-                            </span>
-                        ))}
+                    <div className="pokemon-description">
+                        {pokemon.flavor_text_entries.find((entry) => entry.language.name === "en").flavor_text}
                     </div>
-                    
+
                     <div className="abilities">
                         <h2>Abilities</h2>
                         {pokemon.abilities.map((ability) => (
