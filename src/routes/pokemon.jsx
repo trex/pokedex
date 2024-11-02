@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { getPokemon } from "../pokemon";
 
 export async function loader({ params }) {
@@ -9,6 +9,7 @@ export async function loader({ params }) {
 export default function Pokemon() {
     const { pokemon } = useLoaderData();
     const primaryType = pokemon.types[0].type.name;
+    const { heightUnit, weightUnit } = useOutletContext();
 
     return (
         <div className="pokemon-card" data-type={primaryType}>
@@ -24,8 +25,8 @@ export default function Pokemon() {
                 
                 <div className="pokemon-info">
                     <div className="info-row">
-                        <span className="label">Height:</span> {pokemon.height}
-                        <span className="label">Weight:</span> {pokemon.weight}
+                        <span className="label">Height:</span> {heightUnit.conversion(pokemon.height)} {heightUnit.abreviation}
+                        <span className="label">Weight:</span> {weightUnit.conversion(pokemon.weight)} {weightUnit.abreviation}
                     </div>
                     
                     <div className="types">

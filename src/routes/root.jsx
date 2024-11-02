@@ -5,6 +5,19 @@ import { getPokedex } from "../pokemon";
 // Get the base URL from Vite's env
 const base = import.meta.env.BASE_URL;
 
+const units = {
+  height: [{
+    name: "feet",
+    abreviation: "ft",
+    conversion: (decimeters) => (decimeters * 0.3048).toFixed(2)
+  }],
+  weight: [{
+    name: "pounds",
+    abreviation: "lbs",
+    conversion: (hectograms) => (hectograms * 0.453592).toFixed(2)  
+  }]
+}
+
 export async function loader({ request }) {
   // Hardcoded to National Pokedex for now 
   const pokedex = await getPokedex(1);
@@ -21,6 +34,8 @@ export async function loader({ request }) {
 export default function Root() {
   const { pokedex } = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
+  const [heightUnit, setHeightUnit] = useState(units.height[0]);
+  const [weightUnit, setWeightUnit] = useState(units.weight[0]);
 
   const filteredPokedex = pokedex.filter(pokemon => 
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -67,7 +82,7 @@ export default function Root() {
         </div>
       </div>
       <div id="detail">
-        <Outlet />
+        <Outlet context={{ heightUnit, weightUnit }} />
       </div>
     </>
   );
