@@ -1,22 +1,9 @@
 import { useLoaderData, NavLink, Outlet, redirect } from "react-router-dom";
 import { useState } from "react";
 import { getPokedex } from "../pokemon";
-
+import Settings, { measurementUnits } from "../settings";
 // Get the base URL from Vite's env
 const base = import.meta.env.BASE_URL;
-
-const units = {
-  height: [{
-    name: "feet",
-    abreviation: "ft",
-    conversion: (decimeters) => (decimeters * 0.3048).toFixed(2)
-  }],
-  weight: [{
-    name: "pounds",
-    abreviation: "lbs",
-    conversion: (hectograms) => (hectograms * 0.453592).toFixed(2)  
-  }]
-}
 
 export async function loader({ request }) {
   // Hardcoded to National Pokedex for now 
@@ -34,8 +21,9 @@ export async function loader({ request }) {
 export default function Root() {
   const { pokedex } = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
-  const [heightUnit, setHeightUnit] = useState(units.height[0]);
-  const [weightUnit, setWeightUnit] = useState(units.weight[0]);
+  const [heightUnit, setHeightUnit] = useState(measurementUnits.height.find((unit) => unit.name === "feet"));
+  const [weightUnit, setWeightUnit] = useState(measurementUnits.weight.find((unit) => unit.name === "pounds"));
+  const [showSettings, setShowSettings] = useState(false);
 
   const filteredPokedex = pokedex.filter(pokemon => 
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -52,7 +40,25 @@ export default function Root() {
             className="header-icon"
           />
           <h1 className="pokemon-title">My Pokedex</h1>
+          <button 
+            className="settings-button"
+            onClick={() => setShowSettings(!showSettings)}
+            aria-label="Settings"
+          >
+            ⚙️
+          </button>
         </div>
+        
+        {showSettings && (
+          <Settings 
+            measurementUnits={measurementUnits}
+            heightUnit={heightUnit}
+            weightUnit={weightUnit}
+            setHeightUnit={setHeightUnit}
+            setWeightUnit={setWeightUnit}
+          />
+        )}
+
         <div className="search-container">
           <input
             type="text"
