@@ -1,26 +1,25 @@
 import { useLoaderData, NavLink, Outlet, redirect } from "react-router-dom";
 import { useState } from "react";
-import { getPokemons } from "../pokemons";
+import { getPokedex } from "../pokemon";
 
 export async function loader({ request }) {
-  const pokemons = await getPokemons();
+  // Hardcoded to National Pokedex for now 
+  const pokedex = await getPokedex(1);
   
   // Check if we're on the root path (basename)
   if (new URL(request.url).pathname === '/pokedex/') {
-    // Select a random Pokemon
-    const randomPokemon = pokemons[Math.floor(Math.random() * pokemons.length)];
-    // Redirect to the random Pokemon's page
+    const randomPokemon = pokedex[Math.floor(Math.random() * pokedex.length)];
     return redirect(`/pokemon/${randomPokemon.id}`);
   }
   
-  return { pokemons };
+  return { pokedex };
 }
 
 export default function Root() {
-  const { pokemons } = useLoaderData();
+  const { pokedex } = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredPokemons = pokemons.filter(pokemon => 
+  const filteredPokedex = pokedex.filter(pokemon => 
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pokemon.id.toString().includes(searchTerm)
   );
@@ -40,9 +39,9 @@ export default function Root() {
         </div>
         <div className="nav-container">
           <nav>
-            {filteredPokemons.length ? (
+            {filteredPokedex.length ? (
               <ul>
-                {filteredPokemons.map((pokemon) => (
+                {filteredPokedex.map((pokemon) => (
                   <li key={pokemon.id}>
                     <NavLink to={`/pokemon/${pokemon.id}`}>
                       <span className="pokemon-id">{pokemon.id}</span>

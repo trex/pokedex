@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { getPokemon } from "../pokemons";
+import { getPokemon } from "../pokemon";
 
 export async function loader({ params }) {
     const pokemon = await getPokemon(params.pokemonId);
