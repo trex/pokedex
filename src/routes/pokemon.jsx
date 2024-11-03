@@ -1,5 +1,6 @@
 import { useLoaderData, useOutletContext } from "react-router-dom";
-import { getPokemon } from "../pokemon";
+import { getPokemon, getEvolutionFrom, getEvolutionTo } from "../pokemon";
+import { useState } from "react";
 
 export async function loader({ params }) {
     const pokemon = await getPokemon(params.pokemonId);
@@ -8,13 +9,53 @@ export async function loader({ params }) {
 
 export default function Pokemon() {
     const { pokemon } = useLoaderData();
-    const primaryType = pokemon.types[0].type.name;
+    const primaryType = pokemon.types[0];
     const { heightUnit, weightUnit } = useOutletContext();
+    const [selectedSection, setSelectedSection] = useState('evolution');
+
+    const sections = {
+        evolution: {
+            title: "Evolutions",
+            content: (
+                <div className="evolution-chain">
+                    {getEvolutionTo(pokemon.id, pokemon.evolutionChain).map((stage) => (
+                        <div key={stage.id} className="evolution-stage">
+                            <span className="evolution-name">{stage.name}</span>
+                        </div>
+                    ))}
+                </div>
+            )
+        },
+        abilities: {
+            title: "Abilities",
+            content: (
+                <div className="abilities-list">
+                    {pokemon.abilities.map((abilityName) => (
+                        <span key={abilityName} className="ability-badge">
+                            {abilityName}
+                        </span>
+                    ))}
+                </div>
+            )
+        },
+        moves: {
+            title: "Moves",
+            content: (
+                <div className="moves-list">
+                    {pokemon.moves.slice(0, 4).map((moveName) => (
+                        <span key={moveName} className="move-badge">
+                            {moveName}
+                        </span>
+                    ))}
+                </div>
+            )
+        }
+    };
 
     return (
         <div 
             className="pokemon-card" 
-            style={{ "--pokemon-color": pokemon.color.name }} 
+            style={{ "--pokemon-color": pokemon.color }} 
             data-type={primaryType}
         >
             <div className="card-header">
@@ -24,15 +65,15 @@ export default function Pokemon() {
                 </div>
                 <div className="card-header-right">
                     <div className="pokemon-hp">
-                        <span className="hp-label">HP</span><span className="hp-value">{pokemon.stats.find((stat) => stat.stat.name === "hp").base_stat}</span>
+                        <span className="hp-label">HP</span><span className="hp-value">{pokemon.stats.hp}</span>
                     </div>
                     <div className="types">
-                        {pokemon.types.map((type) => (
+                        {pokemon.types.map((typeName) => (
                             <img 
-                                key={type.type.name} 
-                                src={`../type-icons/${type.type.name}.png`} 
+                                key={typeName} 
+                                src={`../type-icons/${typeName}.png`} 
                                 className="type-badge"
-                                alt={`${type.type.name} type`} 
+                                alt={`${typeName} type`} 
                             />
                         ))}
                     </div>
@@ -41,10 +82,10 @@ export default function Pokemon() {
             
             <div className="card-body">
                 <div className="pokemon-image-container" data-type={primaryType}>
-                    <img src={pokemon.sprites.other["official-artwork"].front_default} alt={pokemon.name} className="pokemon-image" />
+                    <img src={pokemon.artwork.front_default} alt={pokemon.name} className="pokemon-image" />
                     <div className="info-row">
                         <span className="pokemon-number">No. {pokemon.id}</span>
-                        <span className="genus">{pokemon.genera.find((genus) => genus.language.name === "en").genus}</span>
+                        <span className="genus">{pokemon.genera}</span>
                         <span>Height: {heightUnit.conversion(pokemon.height)} {heightUnit.abreviation}</span>
                         <span>Weight: {weightUnit.conversion(pokemon.weight)} {weightUnit.abreviation}</span> 
                     </div>
@@ -52,26 +93,22 @@ export default function Pokemon() {
                 
                 <div className="pokemon-info">
                     <div className="pokemon-description">
-                        {pokemon.flavor_text_entries.find((entry) => entry.language.name === "en").flavor_text}
+                        {pokemon.description}
                     </div>
 
-                    <div className="abilities">
-                        <h2>Abilities</h2>
-                        {pokemon.abilities.map((ability) => (
-                            <span key={ability.ability.name} className="ability-badge">
-                                {ability.ability.name}
-                            </span>
-                        ))}
-                    </div>
-                    
-                    <div className="moves">
-                        <h2>Moves</h2>
-                        <div className="moves-list">
-                            {pokemon.moves.slice(0, 4).map((move) => (
-                                <span key={move.move.name} className="move-badge">
-                                    {move.move.name}
-                                </span>
+                    <div className="info-selector">
+                        <select 
+                            value={selectedSection}
+                            onChange={(e) => setSelectedSection(e.target.value)}
+                            className="section-select"
+                        >
+                            {Object.entries(sections).map(([key, { title }]) => (
+                                <option key={key} value={key}>{title}</option>
                             ))}
+                        </select>
+
+                        <div className="section-content">
+                            {sections[selectedSection].content}
                         </div>
                     </div>
                 </div>

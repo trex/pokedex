@@ -641,3 +641,35 @@ body {
     pointer-events: auto;
   }
 }
+
+.info-selector {
+    margin-top: 1rem;
+}
+
+.section-select {
+    width: inherit;
+    padding: 0.5rem;
+    border: 2px solid var(--type-color);
+    border-radius: 8px;
+    background-color: white;
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.section-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.section-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--type-color);
+    column-count: 2;
+    column-gap: 20px;
+    text-transform: capitalize;
+}
