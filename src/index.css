@@ -1,6 +1,6 @@
 /* Base styles */
 html {
-  box-sizing: border-box;
+  box-sizing: content-box;
 }
 *,
 *:before,
@@ -46,6 +46,7 @@ body {
   --dark-color: #705848;
   --steel-color: #B8B8D0;
   --fairy-color: #EE99AC;
+  --green: #78C850;
 }
 
 /* Sidebar styles */
@@ -134,11 +135,6 @@ body {
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-}
-
-.pokemon-name {
-  text-transform: capitalize;
-  font-size: 1rem;
 }
 
 #sidebar nav a:hover .pokemon-id {
@@ -273,7 +269,8 @@ body {
     border-radius: 15px;
     padding: 12px;
     margin: 2rem auto;
-    background: #f4f4f4;
+    background: color-mix(in srgb, var(--pokemon-color, #ffffff) 40%, white);
+    background-image: url('/felt-texture.png');
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
@@ -286,13 +283,26 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
-    background: #fff;
-    padding: 3px 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 5px;
+    color: #333;
+    position: relative;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: -8px;
+}
+
+.card-header-right {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: -12px;
 }
 
 .pokemon-number {
-    font-size: 0.8rem;
     color: #666;
     font-weight: bold;
 }
@@ -301,7 +311,19 @@ body {
     font-size: 1rem;
     margin: 0;
     text-transform: capitalize;
-    color: #333;
+    color: black;
+    font-stretch: semi-expanded;
+}
+
+.stage-icon {
+  width: 30px;
+  height: 10px;
+  background-color: #ffffff;
+  padding: 5px;
+  margin-right: 5px;
+  transform: skewX(-20deg);
+  border-radius: 3px;
+  background-image: linear-gradient(to bottom, #c1c1c1, #fff, #c1c1c1);
 }
 
 /* Type Colors - Use variables for background colors */
@@ -350,7 +372,7 @@ body {
     margin-bottom: 5px;
     text-align: center;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 1.0);
-    border: 5px solid #F8D030;
+    border: 2px solid aliceblue;
     background: linear-gradient(
         120deg,
         var(--type-color) 0%,
@@ -379,11 +401,12 @@ body {
   width: 125px;
   height: 125px;
   object-fit: contain;
+  -webkit-filter: drop-shadow(3px 5px 3px #222);
+  filter: drop-shadow(3px 5px 3px #222);
 }
 
 /* Info Section */
 .pokemon-info {
-  background: rgba(255, 255, 255, 0.9);
   padding: 8px;
 }
 
@@ -392,13 +415,26 @@ body {
   justify-content: space-around;
   margin-bottom: 3px;
   font-size: 0.5rem;
-  background-color:#F8D030;
+  background-color: white;
+  position: relative;
+  top: 10px;
+  width: 103%;
+  left: -5px;
+  transform: skewX(-20deg);
+  border-radius: 3px;
+  background-image: linear-gradient(to bottom, #c1c1c1, #fff, #c1c1c1);
 }
 
-.label {
-  color: #666;
+.hp-label {
+  font-size: 0.5rem;
+  color: black;
   font-weight: bold;
-  margin-right: 5px;
+}
+
+.hp-value {
+  font-size: .9rem;
+  font-weight: bold;
+  color: black;
 }
 
 /* Type Badges */
@@ -409,6 +445,12 @@ body {
 .type-badge {
   height: 35px;
   width: 35px;
+}
+
+.pokemon-description {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .85rem;
+  color: black;
 }
 
 /* Abilities Section */
