@@ -431,6 +431,15 @@ nd larger screens: */
     [class*="col-"] {
         float: left;
         padding: 15px;
-        border: 1px solid red;
+    }
+
+    /* Hide the hamburger button on larger screens */
+    .nav-button {
+        display: none;
+    }
+
+    /* Show the detail container on larger screens */
+    #detail.nav-open, #detail.nav-closed {
+        display: flex;
     }
 }

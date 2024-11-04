@@ -42,7 +42,7 @@ export default function Root() {
 
   return (
     <>
-      <div className="col-3">
+      <div className="col-4">
         <div className="header-container row">
           <div className="row">
             <img 
@@ -54,63 +54,63 @@ export default function Root() {
           </div>
           <NavButton open={isNavOpen} setOpen={setNavOpen} />
         </div>
-      </div>
-      <div id="nav-container"className={`${isNavOpen ? 'nav-open' : 'nav-closed'}`}>
-        <div className="row">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search Pokemon..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
+        <div id="nav-container"className={`${isNavOpen ? 'nav-open' : 'nav-closed'}`}>
+          <div className="row">
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search Pokemon..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
+            <button 
+              className="settings-button"
+              onClick={() => setShowSettings(!showSettings)}
+              aria-label="Settings"
+            >
+              ⚙️
+            </button>
           </div>
-          <button 
-            className="settings-button"
-            onClick={() => setShowSettings(!showSettings)}
-            aria-label="Settings"
-          >
-            ⚙️
-          </button>
+          <div className="row">
+            {showSettings && (
+              <Settings 
+                measurementUnits={measurementUnits}
+                heightUnit={heightUnit}
+                weightUnit={weightUnit}
+                setHeightUnit={setHeightUnit}
+                setWeightUnit={setWeightUnit}
+              />
+            )}
+          </div>
+          <nav>
+            {filteredPokedex.length ? (
+              <ul>
+                {filteredPokedex.map((pokemon) => (
+                  <li key={pokemon.id}>
+                    <NavLink 
+                      to={`/pokemon/${pokemon.id}`}
+                      onClick={() => {
+                        if (window.innerWidth <= 768) {
+                          setNavOpen(false);
+                        }
+                      }}
+                    >
+                      <div className="left-group">
+                        <img className="pokemon-front-default-sprite" src={`${base}/pokemon_sprites/front_default/${pokemon.id}.png`} alt={pokemon.name} />
+                        <span className="pokemon-name">{pokemon.name}</span>
+                      </div>  
+                      <span className="pokemon-id">{pokemon.id}</span>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p><i>No Pokemon found</i></p>
+            )}
+          </nav>
         </div>
-        <div className="row">
-          {showSettings && (
-            <Settings 
-              measurementUnits={measurementUnits}
-              heightUnit={heightUnit}
-              weightUnit={weightUnit}
-              setHeightUnit={setHeightUnit}
-              setWeightUnit={setWeightUnit}
-            />
-          )}
-        </div>
-        <nav>
-          {filteredPokedex.length ? (
-            <ul>
-              {filteredPokedex.map((pokemon) => (
-                <li key={pokemon.id}>
-                  <NavLink 
-                    to={`/pokemon/${pokemon.id}`}
-                    onClick={() => {
-                      if (window.innerWidth <= 768) {
-                        setNavOpen(false);
-                      }
-                    }}
-                  >
-                    <div className="left-group">
-                      <img className="pokemon-front-default-sprite" src={`${base}/pokemon_sprites/front_default/${pokemon.id}.png`} alt={pokemon.name} />
-                      <span className="pokemon-name">{pokemon.name}</span>
-                    </div>  
-                    <span className="pokemon-id">{pokemon.id}</span>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p><i>No Pokemon found</i></p>
-          )}
-        </nav>
       </div>
     
       <div id="detail" className={`col-6 ${isNavOpen ? 'nav-open' : 'nav-closed'}`}>
