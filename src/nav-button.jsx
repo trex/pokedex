@@ -1,7 +1,7 @@
-export default function MenuButton({ open, setOpen }) {
+export default function NavButton({ open, setOpen }) {
     return (
         <div 
-        className={`menu-button ${open ? 'open' : 'closed'}`} 
+        className={`nav-button nav-${open ? 'open' : 'closed'}`} 
         onClick={() => setOpen(!open)}
         aria-label={open ? "Close nav" : "Open nav"}
         >

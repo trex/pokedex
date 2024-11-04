@@ -2,7 +2,7 @@ import { useLoaderData, NavLink, Outlet, redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getPokedex } from "../pokemon";
 import Settings, { measurementUnits } from "../settings";
-import MenuButton from "../menu-button";
+import NavButton from "../nav-button";
 // Get the base URL from Vite's env
 const base = import.meta.env.BASE_URL;
 
@@ -52,10 +52,10 @@ export default function Root() {
             />
             <h1 className="pokemon-title">My Pokedex</h1>
           </div>
-          <MenuButton open={isNavOpen} setOpen={setNavOpen} />
+          <NavButton open={isNavOpen} setOpen={setNavOpen} />
         </div>
       </div>
-      <div id="nav-container"className={`${isNavOpen ? 'open' : 'closed'}`}>
+      <div id="nav-container"className={`${isNavOpen ? 'nav-open' : 'nav-closed'}`}>
         <div className="row">
           <div className="search-container">
             <input
@@ -110,7 +110,7 @@ export default function Root() {
         </nav>
       </div>
     
-      <div id="detail" className={`col-6 ${isNavOpen ? 'open' : 'closed'}`}>
+      <div id="detail" className={`col-6 ${isNavOpen ? 'nav-open' : 'nav-closed'}`}>
         <div className="row">
           <Outlet context={{ heightUnit, weightUnit }} />
         </div>

@@ -97,15 +97,17 @@ export default function Pokemon() {
                     </div>
 
                     <div className="info-selector">
-                        <select 
-                            value={selectedSection}
-                            onChange={(e) => setSelectedSection(e.target.value)}
-                            className="section-select"
-                        >
-                            {Object.entries(sections).map(([key, { title }]) => (
+                        <div className="select-wrapper">
+                            <select 
+                                value={selectedSection}
+                                onChange={(e) => setSelectedSection(e.target.value)}
+                                className="section-select"
+                            >
+                                {Object.entries(sections).map(([key, { title }]) => (
                                 <option key={key} value={key}>{title}</option>
-                            ))}
-                        </select>
+                                ))}
+                            </select>
+                        </div>
 
                         <div className="section-content">
                             {sections[selectedSection].content}
