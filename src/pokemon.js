@@ -48,11 +48,14 @@ export async function getPokedex(pokedexId) {
         },
     });
 
-    return pokedex.pokemon_entries.map((pokemon) => ({
+    return {
+      pokemon: pokedex.pokemon_entries.map((pokemon) => ({
         id: pokemon.entry_number,
         name: pokemon.pokemon_species.name,
         species_url: pokemon.pokemon_species.url,
-    }));
+      })),
+    name: pokedex.name,
+  };
 }
 
 // ---------------------------------------------------------------------------- 

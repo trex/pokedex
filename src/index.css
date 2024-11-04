@@ -82,6 +82,7 @@ html {
     color: var(--pokemon-blue);
     text-shadow: red 1px 0 1px;
     margin: 0;
+    text-transform: capitalize;
 }
 
 .nav-button {

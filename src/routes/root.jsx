@@ -12,7 +12,7 @@ export async function loader({ request }) {
   
   // Check if we're on the root path (basename)
   if (new URL(request.url).pathname === '/pokedex/') {
-    const randomPokemon = pokedex[Math.floor(Math.random() * pokedex.length)];
+    const randomPokemon = pokedex.pokemon[Math.floor(Math.random() * pokedex.pokemon.length)];
     return redirect(`/pokemon/${randomPokemon.id}`);
   }
   
@@ -35,7 +35,7 @@ export default function Root() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const filteredPokedex = pokedex.filter(pokemon => 
+  const filteredPokedex = pokedex.pokemon.filter(pokemon => 
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pokemon.id.toString().includes(searchTerm)
   );
@@ -50,7 +50,7 @@ export default function Root() {
               alt="Pokeball"
               className="header-icon"
             />
-            <h1 className="pokemon-title">My Pokedex</h1>
+            <h1 className="pokemon-title">{pokedex.name} Pokedex</h1>
           </div>
           <NavButton open={isNavOpen} setOpen={setNavOpen} />
         </div>
