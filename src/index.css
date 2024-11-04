@@ -130,7 +130,21 @@ html {
 
 .search-input {
     width: 100%;
-    padding: 8px;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e3e3e3;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: #f9f9f9;
+}
+
+.settings-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.5rem;
 }
 
 #nav-container nav {
@@ -151,15 +165,40 @@ html {
 
 #nav-container li {
     padding: 8px;
-    margin-bottom: 7px;
-    background-color: #33b5e5;
+    margin-bottom: 0.5rem;
+    background-color: #eeeeee;
     color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     width: 100%;
 }
 
-#nav-container li:hover {
-    background-color: #0099cc;
+#nav-container nav a {
+    text-decoration: none;
+    gap: 1rem;
+    align-items: center;
+    display: flex;
+    padding: 0.5rem;
+    .pokemon-name {
+        font-size: 1rem;
+        margin: 0;
+        text-transform: capitalize;
+        color: black;
+        font-stretch: semi-expanded;
+        font-weight: 500;
+    }
+}
+
+.pokemon-id {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #e3e3e3;
+    border-radius: 50%;
+    color: #777;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 #root.open::before {
