@@ -98,8 +98,11 @@ export default function Root() {
                       }
                     }}
                   >
+                    <div className="left-group">
+                      <img className="pokemon-front-default-sprite" src={`${base}/pokemon_sprites/front_default/${pokemon.id}.png`} alt={pokemon.name} />
+                      <span className="pokemon-name">{pokemon.name}</span>
+                    </div>  
                     <span className="pokemon-id">{pokemon.id}</span>
-                    <span className="pokemon-name">{pokemon.name}</span>
                   </NavLink>
                 </li>
               ))}
