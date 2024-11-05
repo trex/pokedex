@@ -11,6 +11,7 @@ import ErrorPage from './error-page.jsx'
 import Root, { loader as rootLoader } from './routes/root.jsx'
 import Pokemon, { loader as pokemonLoader } from './routes/pokemon.jsx'
 import { queryClient } from './queryClient';
+import Index from './routes/index.jsx'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: rootLoader,
     children: [
+      {
+        index: true,
+        element: <Index />,
+      },
       {
         path: "pokemon/:pokemonId",
         element: <Pokemon />,
