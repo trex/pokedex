@@ -84,10 +84,14 @@ export default function Pokemon() {
                 <div className="pokemon-image-container" data-type={primaryType}>
                     <img src={pokemon.artwork.front_default} alt={pokemon.name} className="pokemon-image" />
                     <div className="info-row">
-                        <span className="pokemon-number">No. {pokemon.id}</span>
-                        <span className="genus">{pokemon.genera}</span>
-                        <span>Height: {heightUnit.conversion(pokemon.height)} {heightUnit.abreviation}</span>
-                        <span>Weight: {weightUnit.conversion(pokemon.weight)} {weightUnit.abreviation}</span> 
+                        <div className="info-row-decor info-row-left-decor"></div>
+                        <div className="info-row-content">
+                            <span className="pokemon-number">No. {pokemon.id}</span>
+                            <span className="genus">{pokemon.genera}</span>
+                            <span>Height: {heightUnit.conversion(pokemon.height)} {heightUnit.abreviation}</span>
+                            <span>Weight: {weightUnit.conversion(pokemon.weight)} {weightUnit.abreviation}</span> 
+                        </div>
+                        <div className="info-row-decor info-row-right-decor"></div>
                     </div>
                 </div>
                 
