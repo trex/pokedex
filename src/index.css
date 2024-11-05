@@ -12,6 +12,10 @@ body {
     font-family: "Segoe UI", "Helvetica Neue", sans-serif;
     line-height: 1.5;
     color: black;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 .row {
@@ -114,6 +118,9 @@ html {
     flex-direction: column;
     width: 100%;
     padding: 10px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100vh - 85px);
 }
 
 #nav-container .row {

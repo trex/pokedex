@@ -31,8 +31,21 @@ export default function Root() {
     const handleResize = () => {
       setNavOpen(window.innerWidth > 768);
     };
+
+    // Add touch event handlers to prevent accidental nav closing
+    const handleTouchStart = (e) => {
+      if (window.innerWidth <= 768 && e.target.closest('#nav-container')) {
+        e.stopPropagation();
+      }
+    };
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('touchstart', handleTouchStart);
+    };
   }, []);
 
   const filteredPokedex = pokedex.pokemon.filter(pokemon => 
