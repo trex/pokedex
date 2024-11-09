@@ -1,6 +1,7 @@
 import { useLoaderData, useOutletContext } from "react-router-dom";
-import { getPokemon, getEvolutionFrom, getEvolutionTo } from "../pokemon";
-import { useState } from "react";
+import Evolutions from "../evolutions";
+import { getPokemon } from "../pokemon";
+import React, { useState } from "react";
 
 export async function loader({ params }) {
     const pokemon = await getPokemon(params.pokemonId);
@@ -14,18 +15,6 @@ export default function Pokemon() {
     const [selectedSection, setSelectedSection] = useState('evolution');
 
     const sections = {
-        evolution: {
-            title: "Evolutions",
-            content: (
-                <div className="evolution-chain">
-                    {getEvolutionTo(pokemon.id, pokemon.evolutionChain).map((stage) => (
-                        <div key={stage.id} className="evolution-stage">
-                            <span className="evolution-name">{stage.name}</span>
-                        </div>
-                    ))}
-                </div>
-            )
-        },
         abilities: {
             title: "Abilities",
             content: (
@@ -38,6 +27,11 @@ export default function Pokemon() {
                 </div>
             )
         },
+        evolution: {
+            title: "Evolutions",
+            content: (
+                <Evolutions targetPokemon={pokemon.name} evolutionChain={pokemon.evolutionChain}/> 
+        )},
         moves: {
             title: "Moves",
             content: (
