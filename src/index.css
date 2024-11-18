@@ -365,15 +365,15 @@ html {
     }
 
     & .info-row {
-        aspect-ratio: 22 / 1;
+        aspect-ratio: 17 / 1;
         width: 93%;
         position: relative;
         top: -5%;
         left: 4.5%;
         display: flex;
-        justify-content: space-around;
-        font-size: 0.6rem;
-        font-weight: 300;
+        align-items: center;
+        font-size: 0.65rem;
+        font-weight: 400;
         transform: skewX(-20deg);
         border-radius: 15px;
         background-image: linear-gradient(to bottom, #c1c1c1, #fff, #c1c1c1);
