@@ -1,5 +1,5 @@
 import { useLoaderData, NavLink, Outlet, redirect } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getPokedex } from "../pokemon";
 import Settings, { measurementUnits } from "../settings";
 import NavButton from "../nav-button";
@@ -26,6 +26,8 @@ export default function Root() {
   const [weightUnit, setWeightUnit] = useState(measurementUnits.weight.find((unit) => unit.name === "pounds"));
   const [showSettings, setShowSettings] = useState(false);
   const [isNavOpen, setNavOpen] = useState(window.innerWidth > 768);
+  const [sortColumn, setSortColumn] = useState("id");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     const handleResize = () => {
@@ -48,10 +50,40 @@ export default function Root() {
     };
   }, []);
 
-  const filteredPokedex = pokedex.pokemon.filter(pokemon => 
-    pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pokemon.id.toString().includes(searchTerm)
-  );
+  const filteredPokedex = useMemo(() => {
+    if (searchTerm.length === 0) {
+      return pokedex.pokemon;
+    }
+    return pokedex.pokemon.filter((pokemon) => {
+      const search = searchTerm.toLowerCase();
+      return pokemon.name.includes(search) ||
+      String(pokemon.id).includes(search) || 
+      String(pokemon.weight).includes(search)
+    });
+  }, [searchTerm, pokedex]);
+
+  const sortedPokedex = useMemo(() => {
+    console.log("updating sortedPokedex", sortColumn, sortOrder);
+    return filteredPokedex.toSorted((a, b) => {
+      const aValue = a[sortColumn];
+      const bValue = b[sortColumn];
+      if (sortOrder === "asc") { 
+        return aValue < bValue ? -1 : 1;
+      } else {
+        return aValue > bValue ? -1 : 1;
+      }
+    });
+  }, [filteredPokedex, sortOrder, sortColumn]);
+
+  const handleHeaderClick = (column) => {
+    if (column === sortColumn) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortColumn(column);
+      setSortOrder("asc");
+    }
+  };
+
 
   return (
     <>
@@ -68,7 +100,7 @@ export default function Root() {
           <NavButton open={isNavOpen} setOpen={setNavOpen} />
         </div>
         <div id="nav-container"className={`${isNavOpen ? 'nav-open' : 'nav-closed'}`}>
-          <div className="row">
+          <div className="row search-row">
             <div className="search-container">
               <input
                 type="text"
@@ -86,7 +118,7 @@ export default function Root() {
               ⚙️
             </button>
           </div>
-          <div className="row">
+          <div className="row settings-container">
             {showSettings && (
               <Settings 
                 measurementUnits={measurementUnits}
@@ -98,30 +130,54 @@ export default function Root() {
             )}
           </div>
           <nav>
-            {filteredPokedex.length ? (
-              <ul>
-                {filteredPokedex.map((pokemon) => (
-                  <li key={pokemon.id}>
-                    <NavLink 
-                      to={`/pokemon/${pokemon.id}`}
-                      onClick={() => {
-                        if (window.innerWidth <= 768) {
-                          setNavOpen(false);
-                        }
-                      }}
-                    >
-                      <div className="left-group">
-                        <img className="pokemon-front-default-sprite" src={`${base}/pokemon_sprites/front_default/${pokemon.id}.png`} alt={pokemon.name} />
-                        <span className="pokemon-name">{pokemon.name}</span>
-                      </div>  
-                      <span className="pokemon-id">{pokemon.id}</span>
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p><i>No Pokemon found</i></p>
-            )}
+            <table>
+              <thead>
+                  <tr>
+                    <th>
+                      <button
+                        className="link"
+                        onClick={() => handleHeaderClick("name")}
+                        aria-label="Name"
+                      >
+                        Name {sortColumn === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+                      </button>
+                    </th>
+                    <th>
+                      <button
+                        className="link"
+                        onClick={() => handleHeaderClick("id")}
+                        aria-label="ID"
+                      >
+                        ID {sortColumn === "id" && (sortOrder === "asc" ? "↑" : "↓")}
+                      </button>
+                    </th>
+                  </tr>
+                </thead>
+              {sortedPokedex.length ? (
+                <tbody>
+                  {sortedPokedex.map((pokemon) => (
+                    <tr key={pokemon.id}>
+                      <NavLink 
+                        to={`/pokemon/${pokemon.id}`}
+                        onClick={() => {
+                          if (window.innerWidth <= 768) {
+                            setNavOpen(false);
+                          }
+                        }}
+                      >
+                        <td className="left-group">
+                          <img className="pokemon-front-default-sprite" src={`${base}/pokemon_sprites/front_default/${pokemon.id}.png`} alt={pokemon.name} />
+                          <span className="pokemon-name">{pokemon.name}</span>
+                        </td>
+                        <td className="pokemon-id">{pokemon.id}</td>
+                      </NavLink>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <p><i>No Pokemon found</i></p>
+              )}
+            </table>
           </nav>
         </div>
       </div>

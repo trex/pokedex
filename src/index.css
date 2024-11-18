@@ -137,9 +137,16 @@ html {
     margin-bottom: 10px;
 }
 
-#nav-container .search-container {
+.search-row {
+    position: sticky;
+    top: 0; 
+    background: white; 
+    z-index: 1; 
+    padding: 3% 0 3% 0;
+}
+
+.search-container {
     flex: 1;
-    margin-right: 10px;
 }
 
 .search-input {
@@ -165,19 +172,42 @@ html {
     width: 100%;
 }
 
-#nav-container ul {
+#nav-container table {
+    width: inherit;
+}
+
+#nav-container thead {
+    display: flex;
+}
+
+#nav-container thead tr {
+    color: black;
+    justify-content: space-between;
+    display: flex;
+    padding: 4.5%;
+    align-items: center;
+}
+
+#nav-container thead button {
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 15px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 10px;
+}
+
+#nav-container tbody {
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 100%;
 }
 
-#nav-container li {
+#nav-container tr {
     width: 100%;
     display: block;
-}
-
-#nav-container li {
     margin-bottom: 0.5rem;
     background-color: #eeeeee;
     color: #ffffff;
@@ -186,6 +216,7 @@ html {
 }
 
 #nav-container nav a {
+    padding: 2%;
     text-decoration: none;
     gap: 1rem;
     align-items: center;
@@ -193,8 +224,12 @@ html {
     justify-content: space-between;
     .left-group {
         display: flex;
-        gap: 10px;
+        gap: 20%;
         align-items: center;
+    }
+    .right-group {
+        display: flex;
+        gap: 5%;
     }
     .pokemon-name {
         font-size: 1rem;
@@ -204,22 +239,27 @@ html {
         font-stretch: semi-expanded;
         font-weight: 500;
     }
+    .id-label {
+        align-content: baseline;
+    }
+    .pokemon-id {
+        width: 2.5rem;
+        height: 2.5rem;
+        background: #e3e3e3;
+        border-radius: 50%;
+        color: #777;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 10px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+    }
 }
 
 .pokemon-front-default-sprite {
     height: 3.5rem;
     width: 3.5rem;
-}
-
-.pokemon-id {
-    width: 2.5rem;
-    height: 2.5rem;
-    background: #e3e3e3;
-    border-radius: 50%;
-    color: #777;
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-right: 10px;
 }
 
 #root.nav-open::before {
@@ -314,13 +354,13 @@ html {
     justify-content: center;
     
     .hp-label {
-        font-size: 0.9rem;
+        font-size: 0.5rem;
         color: black;
         font-weight: 900;
     }
     
     .hp-value {
-    font-size: 0.5rem;
+    font-size: 0.9rem;
     font-weight: bold;
     color: black;
     }
