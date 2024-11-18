@@ -92,7 +92,11 @@ async function fetchPokemon(pokemonId: number | string): Promise<Pokemon> {
     const evolutionData = await getEvolutionChain(pokemon.name);
     if (!evolutionData) throw new Error("Failed to fetch evolution chain");
 
-    // Return only the pokemon data we need in app
+    // Replace random � characters returned by PokeAPI with a space
+    const speciesDescription = species.flavor_text_entries.find((entry: FlavorTextEntry) => entry.language.name === "en").flavor_text
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' '); // Replaces non-printable characters
+    
+        // Return only the pokemon data we need in app
     return { 
         id: pokemon.id,
         name: pokemon.name,
@@ -104,7 +108,7 @@ async function fetchPokemon(pokemonId: number | string): Promise<Pokemon> {
         genera: species.genera.find((genus: PokemonGenus) => genus.language.name === "en").genus,
         height: pokemon.height,
         weight: pokemon.weight,
-        description: species.flavor_text_entries.find((entry: FlavorTextEntry) => entry.language.name === "en").flavor_text,
+        description: speciesDescription,
         abilities: pokemon.abilities.map((ability: PokemonAbility) => ability.ability.name),
         moves: pokemon.moves.map((move: PokemonMove) => move.move.name),
     };

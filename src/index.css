@@ -357,7 +357,6 @@ html {
 
     .pokemon-image {
         height: 100%;
-        bottom: -6%;
         position: relative;
         width: auto;
         object-fit: contain;
@@ -367,9 +366,10 @@ html {
 
     & .info-row {
         aspect-ratio: 22 / 1;
-        width: 95%;
+        width: 93%;
         position: relative;
-        left: 3%;
+        top: -5%;
+        left: 4.5%;
         display: flex;
         justify-content: space-around;
         font-size: 0.6rem;
@@ -380,7 +380,10 @@ html {
     }
 
     .info-row-content {
+        width: 100%;
         z-index: 1;
+        display: flex;
+        justify-content: space-between;
     }
 
     .info-row-decor {
@@ -438,7 +441,7 @@ html {
 
     .pokemon-description {
         width: auto;
-        height: 10%;
+        height: 15%;
         font-weight: 450;
         line-height: 1.1;
         letter-spacing: 0.1rem;
@@ -448,7 +451,7 @@ html {
 
     .info-selector {
         width: auto;
-        height: 85%;
+        height: 80%;
     }
 
     .select-wrapper {

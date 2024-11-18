@@ -21,29 +21,30 @@ export default function Evolutions({ targetPokemon, evolutionChain }) {
 
 function buildChildNode(evolution){
     return (
-        <NavLink to={`/pokemon/${evolution.id}`}>
+        <NavLink key={evolution.id} to={`/pokemon/${evolution.id}`}>
             <div key={evolution.id} className="evolution-child pokeball">
                 <img className="pokemon-evolution-sprite" src={`${base}/pokemon_sprites/front_default/${evolution.id}.png`} alt={`${evolution.name} evolution sprite`} />
                 <p className="pokemon-evolution-name">{evolution.name}</p>
             </div>
-            
         </NavLink>
     );
 }
 
 function filterPokemonEvolutions(targetPokemon, evolutionChain){
     if (evolutionChain.name === targetPokemon) {
-      const evolutions = evolutionChain.evolvesTo.map((evolution) => {
+      const evolutions = (evolutionChain.evolvesTo.length > 0) ? evolutionChain.evolvesTo.map((evolution) => {
         return {
             id: evolution.pokemon.pokemonId,
             name: evolution.pokemon.name   
         }
-      });
+      }) : [];
       return evolutions;
     }
   
     for (let i=0; i < evolutionChain.evolvesTo.length; i++) {
-      console.log(i, targetPokemon, evolutionChain.evolvesTo.length)
-      return filterPokemonEvolutions(targetPokemon, evolutionChain.evolvesTo[i].pokemon);
+        const currentEvolution = evolutionChain.evolvesTo[i].pokemon;
+        return filterPokemonEvolutions(targetPokemon, currentEvolution);
     }
+    // Traversed the whole chain and this pokemon does not evolve
+    return [];
 }
