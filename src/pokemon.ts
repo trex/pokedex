@@ -177,23 +177,28 @@ async function getEvolutionChain(evolutionChainUrl: string): Promise<PokemonNode
 
       // Process each evolution in the chain
       evolutionNode.evolves_to.forEach((evolution: any) => {
-        const requirement: EvolutionRequirement = {
+        const requirement: EvolutionRequirement = evolution.evolution_details.length ? {
           trigger: evolution.evolution_details[0].trigger.name,
           minLevel: evolution.evolution_details[0].min_level || undefined,
           item: evolution.evolution_details[0].item?.name || undefined,
           location: evolution.evolution_details[0].location?.name || undefined,
           otherConditions: [],
-        };
+        } : {
+          trigger: '', // Default value
+          otherConditions: [],
+        }
 
-        // Add other conditions for evolution if applicable
-        if (evolution.evolution_details[0].held_item) {
-          requirement.otherConditions.push(`Held item: ${evolution.evolution_details[0].held_item.name}`);
-        }
-        if (evolution.evolution_details[0].known_move) {
-          requirement.otherConditions.push(`Known move: ${evolution.evolution_details[0].known_move.name}`);
-        }
-        if (evolution.evolution_details[0].time_of_day) {
-          requirement.otherConditions.push(`Time of day: ${evolution.evolution_details[0].time_of_day}`);
+        if (evolution.evolution_details.length) {
+          // Add other conditions for evolution if applicable
+          if (evolution.evolution_details[0].held_item) {
+            requirement.otherConditions.push(`Held item: ${evolution.evolution_details[0].held_item.name}`);
+          }
+          if (evolution.evolution_details[0].known_move) {
+            requirement.otherConditions.push(`Known move: ${evolution.evolution_details[0].known_move.name}`);
+          }
+          if (evolution.evolution_details[0].time_of_day) {
+            requirement.otherConditions.push(`Time of day: ${evolution.evolution_details[0].time_of_day}`);
+          }
         }
 
         nodeId += 1;
