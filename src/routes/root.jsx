@@ -63,7 +63,6 @@ export default function Root() {
   }, [searchTerm, pokedex]);
 
   const sortedPokedex = useMemo(() => {
-    console.log("updating sortedPokedex", sortColumn, sortOrder);
     return filteredPokedex.toSorted((a, b) => {
       const aValue = a[sortColumn];
       const bValue = b[sortColumn];

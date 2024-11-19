@@ -26,6 +26,15 @@ interface PokemonMove {
   move: { name: string };
 }
 
+interface PokemonVariety {
+  isDefault: boolean;
+  pokemon: {
+    id: number;
+    name: string;
+    url: string;
+  };
+}
+
 interface Pokemon {
   id: number;
   name: string;
@@ -40,6 +49,7 @@ interface Pokemon {
   description: string;
   abilities: PokemonAbility[];
   moves: PokemonMove[];
+  varieties: PokemonVariety[];
 }
 
 interface PokedexEntry {
@@ -84,12 +94,9 @@ async function fetchPokemon(pokemonId: number | string): Promise<Pokemon> {
     // Fetch the pokemon's species data
     const speciesResponse = await fetch(pokemon.species.url);
     const species = await speciesResponse.json();
-    // Fetch the pokemon's evolution chain
-    const evolutionChainResponse = await fetch(species.evolution_chain.url);
-    const evolutionChain = await evolutionChainResponse.json();
 
     // Add await here
-    const evolutionData = await getEvolutionChain(pokemon.name);
+    const evolutionData = await getEvolutionChain(species.evolution_chain.url);
     if (!evolutionData) throw new Error("Failed to fetch evolution chain");
 
     // Replace random � characters returned by PokeAPI with a space
@@ -111,6 +118,15 @@ async function fetchPokemon(pokemonId: number | string): Promise<Pokemon> {
         description: speciesDescription,
         abilities: pokemon.abilities.map((ability: PokemonAbility) => ability.ability.name),
         moves: pokemon.moves.map((move: PokemonMove) => move.move.name),
+        varieties: species.varieties.map((variety: PokemonVariety) => {
+          return {
+            ...variety,
+            pokemon: {
+              ...variety.pokemon,
+              id: getIdFromUrl(variety.pokemon.url),
+            },
+          }
+        }),
     };
 }
 
@@ -142,22 +158,14 @@ export async function getPokedex(pokedexId: number | string): Promise<PokedexRes
 }
 
 // Helper function to get evolution chain by Pokémon name
-async function getEvolutionChain(pokemonName: string): Promise<PokemonNode | null> {
+async function getEvolutionChain(evolutionChainUrl: string): Promise<PokemonNode | null> {
   try {
-    // Step 1: Get Pokémon species to retrieve the evolution chain URL
-    const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`);
-    if (!speciesResponse.ok) throw new Error("Failed to fetch Pokémon species");
-    const speciesData = await speciesResponse.json();
-    const evolutionChainUrl = speciesData.evolution_chain.url;
-
-    // Step 2: Fetch the evolution chain data
     const evolutionResponse = await fetch(evolutionChainUrl);
     if (!evolutionResponse.ok) throw new Error("Failed to fetch evolution chain");
     const evolutionData = await evolutionResponse.json();
     const evolutionChain = evolutionData.chain;
 
     let nodeId = 0;
-    // Step 3: Recursively parse the evolution chain data into the PokemonNode structure
     const parseChain = (evolutionNode: any, nodeId: number): PokemonNode => {
       // Create the base Pokémon node
       const currentPokemon: PokemonNode = {
@@ -177,7 +185,7 @@ async function getEvolutionChain(pokemonName: string): Promise<PokemonNode | nul
           otherConditions: [],
         };
 
-        // Add other conditions if applicable
+        // Add other conditions for evolution if applicable
         if (evolution.evolution_details[0].held_item) {
           requirement.otherConditions.push(`Held item: ${evolution.evolution_details[0].held_item.name}`);
         }

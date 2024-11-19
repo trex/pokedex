@@ -1,4 +1,4 @@
-import { useLoaderData, useOutletContext } from "react-router-dom";
+import { NavLink, useLoaderData, useOutletContext } from "react-router-dom";
 import Evolutions from "../evolutions";
 import { getPokemon } from "../pokemon";
 import React, { useState } from "react";
@@ -42,6 +42,27 @@ export default function Pokemon() {
                         </span>
                     ))}
                 </div>
+            )
+        },
+        varieties: {
+            title: "Varieties",
+            content: (
+                <ul className="variety-list">
+                    {pokemon.varieties.map((variety) => (
+                        <li key={variety.pokemon.name} className="pokemon-variety">
+                            {pokemon.id !== variety.pokemon.id ? (
+                                <NavLink 
+                                    to={`/pokemon/${variety.pokemon.id}`}
+                                    className="pokemon-variety-link"
+                                    display={pokemon.id !== variety.pokemon.id}
+                                >
+                                    {variety.pokemon.name}
+                                </NavLink>
+                             ) : (<span>{variety.pokemon.name}</span>)
+                            };
+                        </li>
+                    ))}
+                </ul>
             )
         }
     };
