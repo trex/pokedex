@@ -65,7 +65,6 @@ export default function Pokemon() {
                                     className={({ isActive}) => 
                                         `pokemon-variety-link ${isActive ? "active" : ""}`
                                     }
-                                    disabled
                                 >
                                     {pokemonVariety}
                                 </NavLink>
@@ -84,7 +83,9 @@ export default function Pokemon() {
         >
             <div className="card-header">
                 <div className="card-header-left">
-                    <img src="../stage-2.png" alt="basic" className="stage-icon" />
+                    <img src={`../${pokemon.stage}.png`} alt={pokemon.stage} 
+                        className={`stage-icon ${pokemon.stage.includes("stage") || pokemon.stage.includes("basic") ? "stage-decorator" : ""}`}
+                    />
                     <h1 className="pokemon-name">{pokemon.name}</h1>
                 </div>
                 <div className="card-header-right">

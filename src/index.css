@@ -318,7 +318,7 @@ html {
 }
 
 .card-header-left {
-    width: auto;
+    width: 85%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -326,7 +326,8 @@ html {
     position: absolute;
     left: -10%;
     .pokemon-name {
-        font-size: 1.5rem;
+        width: 100%;
+        font-size: 5.5vw;
         margin: 0;
         text-transform: capitalize;
         color: black;
@@ -334,14 +335,17 @@ html {
         font-weight: 550;
     }
     .stage-icon {
-        height: 65%;
+        height: 200%;
         width: auto;
         padding: 2%;
-        margin-right: 10%;
-        transform: skewX(-20deg);
-        border-radius: 3%;
-        background-image: linear-gradient(to bottom, #c1c1c1, #fff, #c1c1c1);
+        &.stage-decorator {
+            height: 65%;
+            transform: skewX(-20deg);
+            border-radius: 3%;
+            background-image: linear-gradient(to bottom, #c1c1c1, #fff, #c1c1c1);
+        }
     }
+    
 }
 
 .card-header-right {
@@ -412,7 +416,7 @@ html {
         left: 4.5%;
         display: flex;
         align-items: center;
-        font-size: 0.65rem;
+        font-size: 2.5vw;
         font-weight: 400;
         transform: skewX(-20deg);
         border-radius: 15px;

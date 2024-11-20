@@ -42,6 +42,7 @@ interface Pokemon {
   types: PokemonType[];
   stats: { hp: number };
   evolutionChain: PokemonNode;
+  stage: string;
   artwork: { front_default: string };
   genera: PokemonGenus;
   height: number;
@@ -99,6 +100,8 @@ async function fetchPokemon(pokemonId: number | string): Promise<Pokemon> {
     const evolutionData = await getEvolutionChain(species.evolution_chain.url);
     if (!evolutionData) throw new Error("Failed to fetch evolution chain");
 
+    const strippedName = pokemon.name.replace(/[\u0000-\u001F\u007F-\u009F]/g, ' '); // Replaces non-printable characters
+    
     // Replace random � characters returned by PokeAPI with a space
     const speciesDescription = species.flavor_text_entries.find((entry: FlavorTextEntry) => entry.language.name === "en").flavor_text
         .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' '); // Replaces non-printable characters
@@ -106,11 +109,12 @@ async function fetchPokemon(pokemonId: number | string): Promise<Pokemon> {
         // Return only the pokemon data we need in app
     return { 
         id: pokemon.id,
-        name: pokemon.name,
+        name: strippedName,
         color: species.color.name,
         types: pokemon.types.map((type: PokemonType) => type.type.name),
         stats: {hp: pokemon.stats[0].base_stat},
         evolutionChain: evolutionData,
+        stage: getStage(pokemon.name, evolutionData),
         artwork: {front_default: pokemon.sprites.other["official-artwork"].front_default},
         genera: species.genera.find((genus: PokemonGenus) => genus.language.name === "en").genus,
         height: pokemon.height,
@@ -218,6 +222,47 @@ async function getEvolutionChain(evolutionChainUrl: string): Promise<PokemonNode
     console.error("Error fetching evolution chain:", error);
     return null;
   }
+}
+
+function getStage(targetPokemonName: string, node: PokemonNode): string {
+  let stage = 0;
+
+  if (targetPokemonName.includes("mega")) {
+    return "mega";
+  }
+  else if (targetPokemonName.includes("gmax")) {
+    return "gmax";
+  }
+  else if (targetPokemonName.includes("tera")) {
+    return "tera";
+  }
+
+  function parseChain(currentNode: PokemonNode): number {
+    stage += 1;
+    if (currentNode.name === targetPokemonName) {
+      return stage;
+    }
+
+    currentNode.evolvesTo.map((evolution: Evolution) => {
+      return parseChain(evolution.pokemon);
+    })
+    return stage;
+  };
+  
+  let result = "";
+  switch (parseChain(node)) {
+    case 1:
+      result = "basic";
+      break;
+    case 2:
+      result = "stage-1";
+      break;
+    case 3: 
+      result = "stage-2";
+      break;
+  }
+
+  return result;
 }
 
 function getIdFromUrl(url: string): number | null {
