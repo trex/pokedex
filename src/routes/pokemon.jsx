@@ -3,6 +3,8 @@ import Evolutions from "../evolutions";
 import { getPokemon } from "../pokemon";
 import React, { useState } from "react";
 
+const base = import.meta.env.BASE_URL;
+
 export async function loader({ params }) {
     const pokemon = await getPokemon(params.pokemonId);
     return { pokemon };
@@ -47,22 +49,29 @@ export default function Pokemon() {
         varieties: {
             title: "Varieties",
             content: (
-                <ul className="variety-list">
-                    {pokemon.varieties.map((variety) => (
-                        <li key={variety.pokemon.name} className="pokemon-variety">
-                            {pokemon.id !== variety.pokemon.id ? (
+                <div className="variety-list">
+                    {pokemon.varieties.map((variety) => {
+                        const pokemonVariety = (
+                            <div className="pokemon-variety-grid">
+                                <img className="pokemon-front-default-sprite" src={`${base}/pokemon_sprites/front_default/${variety.pokemon.id}.png`} alt={variety.pokemon.name} />
+                                <span>{variety.pokemon.name}</span>
+                            </div>
+                        )
+        
+                        return (
+                        <span key={variety.pokemon.name} className="pokemon-variety">
                                 <NavLink 
                                     to={`/pokemon/${variety.pokemon.id}`}
-                                    className="pokemon-variety-link"
-                                    display={pokemon.id !== variety.pokemon.id}
+                                    className={({ isActive}) => 
+                                        `pokemon-variety-link ${isActive ? "active" : ""}`
+                                    }
+                                    disabled
                                 >
-                                    {variety.pokemon.name}
+                                    {pokemonVariety}
                                 </NavLink>
-                             ) : (<span>{variety.pokemon.name}</span>)
-                            };
-                        </li>
-                    ))}
-                </ul>
+                        </span>
+                    )})}
+                </div>
             )
         }
     };

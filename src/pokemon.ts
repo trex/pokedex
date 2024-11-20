@@ -139,20 +139,20 @@ export async function getPokemon(pokemonId: number | string): Promise<Pokemon> {
 }
 
 export async function getPokedex(pokedexId: number | string): Promise<PokedexResponse> {
-    const pokedex = await queryClient.ensureQueryData({
-        queryKey: ['pokedex', pokedexId],
-        queryFn: async () => {
-            const response = await fetch(`${POKEAPI_URL}/pokedex/${pokedexId}`);
-            return await response.json();
-        },
-    });
+  const pokedex = await queryClient.ensureQueryData({
+      queryKey: ['pokedex', pokedexId],
+      queryFn: async () => {
+          const response = await fetch(`${POKEAPI_URL}/pokedex/${pokedexId}`);
+          return await response.json();
+      },
+  });
 
-    return {
-      pokemon: pokedex.pokemon_entries.map((pokemon: PokedexEntry) => ({
-        id: pokemon.entry_number,
-        name: pokemon.pokemon_species.name,
-        species_url: pokemon.pokemon_species.url,
-      })),
+  return {
+    pokemon: pokedex.pokemon_entries.map((pokemon: PokedexEntry) => ({
+      id: pokemon.entry_number,
+      name: pokemon.pokemon_species.name,
+      species_url: pokemon.pokemon_species.url,
+    })),
     name: pokedex.name,
   };
 }

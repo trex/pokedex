@@ -538,13 +538,13 @@ html {
         padding: 3%;
     }
 
-    .moves-list, .abilities-list, .evolution-chain {
+    .moves-list, .abilities-list, .evolution-chain, .variety-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
     }
 
-    .move-badge, .ability-badge, .evolution-stage {
+    .move-badge, .ability-badge, .evolution-stage, .pokemon-variety {
         padding: 8px 8px;
         background: #f0f0f0;
         border-radius: 8px;
@@ -589,6 +589,30 @@ html {
         color: black;
         font-size: 1rem;
         font-weight: 500;
+    }
+
+    .pokemon-variety {
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .pokemon-variety-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 2fr 1fr;
+        justify-items: center;
+    }
+
+    .pokemon-variety-link {
+        text-decoration: none;
+        -webkit-filter: drop-shadow(.2em .2em .2em blue);
+        filter: drop-shadow(.2em .2em .2em blue);
+        color: #333
+    }
+
+    .pokemon-variety-link.active {
+        -webkit-filter: drop-shadow(.2em .2em .2em red);
+        filter: drop-shadow(.2em .2em .2em red);
     }
 }
 
