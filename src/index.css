@@ -609,14 +609,14 @@ html {
 
     .pokemon-variety-link {
         text-decoration: none;
-        -webkit-filter: drop-shadow(.2em .2em .2em blue);
-        filter: drop-shadow(.2em .2em .2em blue);
+        -webkit-filter: drop-shadow(3px 3px 3px blue);
+        filter: drop-shadow(3px 3px 3px blue);
         color: #333
     }
 
     .pokemon-variety-link.active {
-        -webkit-filter: drop-shadow(.2em .2em .2em red);
-        filter: drop-shadow(.2em .2em .2em red);
+        -webkit-filter: drop-shadow(3px 3px 3px red);
+        filter: drop-shadow(3px 3px 3px red);
     }
 }
 
